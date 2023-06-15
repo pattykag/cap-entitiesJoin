@@ -1,0 +1,70 @@
+_schema-version: '3.1'
+ID: cap-entitiesJoin
+version: 1.0.0
+description: "A simple CAP project."
+parameters:
+  enable-parallel-deployments: true
+build-parameters:
+  before-all:
+    - builder: custom
+      commands:
+        - npx -p @sap/cds-dk cds build --production
+modules:
+  - name: cap-entitiesJoin-srv
+    type: nodejs
+    path: gen/srv
+    parameters:
+      buildpack: nodejs_buildpack
+    build-parameters:
+      builder: npm-ci
+    provides:
+      - name: srv-api # required by consumers of CAP services (e.g. approuter)
+        properties:
+          srv-url: ${default-url}
+    requires:
+      - name: xsuaa
+      - name: db
+      - name: destination
+      - name: connectivity
+
+  - name: cap-entitiesJoin-db-deployer
+    type: hdb
+    path: gen/db
+    parameters:
+      buildpack: nodejs_buildpack
+    requires:
+      - name: db
+
+resources:
+  - name: xsuaa
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: xsuaa
+      service-name: cap-entitiesJoin-xsuaa
+      service-plan: application
+      path: ./xs-security.json
+      config:
+        xsappname: cap-entitiesJoin-${org}-${space}
+        tenant-mode: dedicated
+  - name: db
+    type: com.sap.xs.hdi-container
+    parameters:
+      service-name: cap-entitiesJoin-db
+      service: hana
+      service-plan: hdi-shared
+  - name: destination
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service-name: cap-entitiesJoin-dest
+      service-keys:
+        - name: cap-entitiesJoin-dest-key
+      service: destination
+      service-plan: lite
+  - name: connectivity
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service-name: cap-entitiesJoin-connectivity
+      service-keys:
+        - name: cap-entitiesJoin-connectivity-key
+      service: connectivity
+      service-plan: lite

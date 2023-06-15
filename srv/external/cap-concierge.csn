@@ -1,0 +1,64 @@
+{
+  "meta": {
+    "creator": "cds-dk 6.8.2"
+  },
+  "$version": "2.0",
+  "definitions": {
+    "cap_concierge.ZCDS_VH_Account": {
+      "kind": "entity",
+      "@cds.external": true,
+      "@cds.persistence.skip": true,
+      "elements": {
+        "Account": {
+          "key": true,
+          "type": "cds.String",
+          "length": 10,
+          "notNull": true
+        },
+        "Account_Text": {
+          "type": "cds.String",
+          "length": 80
+        },
+        "Country": {
+          "type": "cds.String",
+          "length": 3
+        }
+      },
+      "@Capabilities.DeleteRestrictions.Deletable": false,
+      "@Capabilities.InsertRestrictions.Insertable": false,
+      "@Capabilities.UpdateRestrictions.Updatable": false
+    },
+    "cap_concierge.ZCDS_VH_Company_Code": {
+      "kind": "entity",
+      "@cds.external": true,
+      "@cds.persistence.skip": true,
+      "elements": {
+        "Company_Code": {
+          "key": true,
+          "type": "cds.String",
+          "length": 4,
+          "notNull": true
+        },
+        "Country": {
+          "type": "cds.String",
+          "length": 3
+        },
+        "Country_Text": {
+          "type": "cds.String",
+          "length": 25
+        },
+        "Company_Name": {
+          "type": "cds.String",
+          "length": 25
+        }
+      },
+      "@Capabilities.DeleteRestrictions.Deletable": false,
+      "@Capabilities.InsertRestrictions.Insertable": false,
+      "@Capabilities.UpdateRestrictions.Updatable": false
+    },
+    "cap_concierge": {
+      "kind": "service",
+      "@cds.external": true
+    }
+  }
+}
