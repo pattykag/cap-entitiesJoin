@@ -2,6 +2,7 @@ using {joins as my} from '../db/schema';
 
 
 @path: 'join-service'
+@requires: 'authenticated-user'
 service externaljoin {
     entity Sells                as projection on my.Sells;
     entity WithAssociations     as projection on my.WithAssociations;
